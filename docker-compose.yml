@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  backup-management:
+    build: ./
+    volumes:
+      - C:\Users\tinhh\PycharmProjects\django_projects\backup_management:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: backup
+      MYSQL_USER: backup_user
+      MYSQL_PASSWORD: backuppw
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql:
