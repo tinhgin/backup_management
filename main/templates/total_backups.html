@@ -42,8 +42,8 @@
 {#                        </div>#}
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
+                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                    <thead class="table-primary">
                                         <tr>
                                             <th>Backup Name</th>
                                             <th>Project</th>
@@ -55,7 +55,7 @@
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
+                                    <tfoot class="table-primary">
                                         <tr>
                                             <th>Backup Name</th>
                                             <th>Project</th>
@@ -69,7 +69,16 @@
                                     </tfoot>
                                     <tbody>
                                     {% for backup in backups %}
-                                        <tr>
+                                        {% if backup.status == "SUCCESS" %}
+                                           {% firstof "table-success" as color %}
+                                        {% endif %}
+                                        {% if backup.status == "MISSING" %}
+                                           {% firstof "table-danger" as color %}
+                                        {% endif %}
+                                        {% if backup.status == "WARNING (size less than yesterday backup size)" %}
+                                           {% firstof "table-warning" as color %}
+                                        {% endif %}
+                                        <tr class="{{ color }} clickableRow" href='/admin' style="cursor: pointer;">
                                             <td>{{ backup.name }}</td>
                                             <td>{{ backup.project }}</td>
                                             <td>{{ backup.storage_type }}</td>
