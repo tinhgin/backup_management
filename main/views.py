@@ -68,3 +68,14 @@ def warning_backups(request):
         'warning_backups.html',
         context={'warning_backups': warning_backups, 'backups': get_backup_list("WARNING (size less than yesterday backup size)")},
     )
+
+@login_required
+def test(request):
+    warning_backups = get_backup_count()[3]
+
+    # Render the HTML template index.html with the data in the context variable.
+    return render(
+        request,
+        'backup_instances.html',
+        context={'warning_backups': warning_backups, 'backups': get_backup_list("WARNING (size less than yesterday backup size)")},
+    )

@@ -26,6 +26,7 @@ urlpatterns = [
     path('backup/success/', views.success_backups, name='success_backups'),
     path('backup/missing/', views.missing_backups, name='missing_backups'),
     path('backup/warning/', views.warning_backups, name='warning_backups'),
+    path('test/', views.test, name='test'),
 ]
 
 

@@ -12,9 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-import environ
-env = environ.Env
-environ.Env.read_env()  # reading .env file
+from backup_management import env
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -92,11 +91,11 @@ WSGI_APPLICATION = 'backup_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': env().str('DB_NAME'),
-        'USER': env().str('DB_USER'),
-        'PASSWORD': env().str('DB_PASSWORD'),
-        'HOST': env().str('DB_HOST'),
-        'PORT': env().str('DB_PORT'),
+        'NAME': env.DB_NAME,
+        'USER': env.DB_USER,
+        'PASSWORD': env.DB_PASSWORD,
+        'HOST': env.DB_HOST,
+        'PORT': env.DB_PORT,
     }
 }
 
@@ -145,12 +144,12 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_USE_TLS = env().bool('EMAIL_USE_TLS')
-EMAIL_HOST = env().str('EMAIL_HOST')
-EMAIL_PORT = env().int('EMAIL_PORT')
-EMAIL_HOST_USER = env().str('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env().str('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = env().str('DEFAULT_FROM_EMAIL')
+EMAIL_USE_TLS = env.EMAIL_USE_TLS
+EMAIL_HOST = env.EMAIL_HOST
+EMAIL_PORT = env.EMAIL_PORT
+EMAIL_HOST_USER = env.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = env.EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = env.DEFAULT_FROM_EMAIL
 
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
@@ -176,3 +175,5 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+# KRONOS_PREFIX = 'for i in $(cat {}); do  if [ $i == *"="* ]; then export $j; fi; done '.format(os.path.join(BASE_DIR, 'backup_management/.env'))

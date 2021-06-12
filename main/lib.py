@@ -1,21 +1,20 @@
 import logging, sys, os
-import environ
 import telegram
 from .models import Backup, BackupInstance, FSPath, S3Path, TotalBackup
 from django.db import connection
+from main import env
 
 
 def show_error(e):
-    env = environ.Env
-    chat_id = env().str('TELEGRAM_CHAT_ID')
+    chat_id = env.TELEGRAM_CHAT_ID
     try:
         if env().str('PROXY') == '':
-            bot = telegram.Bot(token=env().str('TELEGRAM_BOT_TOKEN'))
+            bot = telegram.Bot(token=env.TELEGRAM_BOT_TOKEN)
         else:
-            pp = telegram.utils.request.Request(proxy_url=env().str('PROXY'))
-            bot = telegram.Bot(token=env().str('TELEGRAM_BOT_TOKEN'), request=pp)
+            pp = telegram.utils.request.Request(proxy_url=env.PROXY)
+            bot = telegram.Bot(token=env.TELEGRAM_BOT_TOKEN, request=pp)
     except:
-        bot = telegram.Bot(token=env().str('TELEGRAM_BOT_TOKEN'))
+        bot = telegram.Bot(token=env.TELEGRAM_BOT_TOKEN)
 
 
     logger = logging.getLogger('BACKUP-MANAGEMENT')
