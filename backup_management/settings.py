@@ -176,4 +176,4 @@ CACHES = {
     }
 }
 
-# KRONOS_PREFIX = 'for i in $(cat {}); do  if [ $i == *"="* ]; then export $j; fi; done '.format(os.path.join(BASE_DIR, 'backup_management/.env'))
+KRONOS_PREFIX = 'cd {};'.format(BASE_DIR)

@@ -58,7 +58,7 @@ def update_backup_instances_job():
                         try:
                             filename = line.rstrip()
                             # (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command("stat -c %Z " + str(i.fs_storage) + filename)
-                            (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command('if [ "$(stat -c %F ' + str(i.fs_storage) + "/" + filename + ')" == "directory" ]; then find ' + str(i.fs_storage) + "/" + filename + ' -type f -daystart -mtime 0  -print0 | xargs -0 stat -c %Y | head -1' + '; else stat -c %Y ' + str(i.fs_storage) + "/" + filename + '; fi')
+                            (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command('if [ "$(stat -c %F ' + str(i.fs_storage) + "/" + filename + ')" == "directory" ]; then find ' + str(i.fs_storage) + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Y ' + str(i.fs_storage) + "/" + filename + '; fi')
                             try:
                                 date_str = ssh_stdout1.readlines()[0].rstrip()
                             except:

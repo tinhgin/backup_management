@@ -1,3 +1,7 @@
+TELEGRAM_BOT_TOKEN = '1845506332:AAFHh5eJ5JOhakPg4NCI6qc0MJ1ybpMT0tk'
+TELEGRAM_CHAT_ID = '-573997398'
+PROXY = ''
+
 DB_NAME = 'backup'
 DB_USER = 'backup_user'
 DB_PASSWORD = 'backuppw'

@@ -2,7 +2,7 @@ import logging, sys, os
 import telegram
 from .models import Backup, BackupInstance, FSPath, S3Path, TotalBackup
 from django.db import connection
-from main import env
+from backup_management import env
 
 
 def show_error(e):
@@ -278,3 +278,15 @@ def get_storage_type_size():
     except Exception as e:
         show_error(e)
     connection.close()
+
+def get_size_unit(size):
+    if size < 1024:
+        return "bytes"
+    elif size < 1048576:
+        return "KB"
+    elif size < 1073741824:
+        return "MB"
+    elif size < 137438953472:
+        return "GB"
+    else:
+        return "TB"

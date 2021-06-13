@@ -78,7 +78,7 @@
                                         {% if backup.status == "WARNING (size less than yesterday backup size)" %}
                                            {% firstof "table-warning" as color %}
                                         {% endif %}
-                                        <tr class="{{ color }} clickableRow" href='{% url 'test' %}' style="cursor: pointer;">
+                                        <tr class="{{ color }} clickableRow" href='/backup-detail/{{ backup.name }}' style="cursor: pointer;">
                                             <td>{{ backup.name }}</td>
                                             <td>{{ backup.project }}</td>
                                             <td>{{ backup.storage_type }}</td>

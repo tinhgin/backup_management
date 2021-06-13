@@ -69,7 +69,7 @@
                                     </tfoot>
                                     <tbody>
                                     {% for backup in backups %}
-                                        <tr class='clickableRow' href='/admin' style="cursor: pointer;">
+                                        <tr class='clickableRow' href='/backup-detail/{{ backup.name }}' style="cursor: pointer;">
                                             <td>{{ backup.name }}</td>
                                             <td>{{ backup.project }}</td>
                                             <td>{{ backup.storage_type }}</td>
