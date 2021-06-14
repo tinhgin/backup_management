@@ -4,13 +4,15 @@ import paramiko
 import datetime
 import pytz
 from .lib import show_error
-import logging, sys
+import logging
+import sys
 from django.db import connection
+from backup_management import env
 
 logger = logging.getLogger('BACKUP-MANAGEMENT')
 logging.basicConfig(stream=sys.stdout, level=logging.ERROR)
 
-@kronos.register('0 8 * * *')
+@kronos.register(env.CRONJOB)
 def update_backup_instances_job():
     try:
         backups = Backup.objects.all()

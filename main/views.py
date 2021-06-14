@@ -113,11 +113,13 @@ def backup_detail(request, backup_name):
             elif size_unit == "TB":
                 max_size = max_size / 137438953472
 
-            if max_size < 12:
+
+            if max_size < 10:
+                max_size = (int(max_size%10)) + 1
                 max_tick = max_size + 1
             else:
                 max_tick = 12
-                if max_size < 120:
+                if max_size < 100:
                     if max_size%10 != 0:
                         max_size = (int(max_size/10))*10 + 10
                 else:
@@ -128,15 +130,16 @@ def backup_detail(request, backup_name):
                 backup_instances_dict = {}
                 backup_instances_dict['date'] = i.date
                 if size_unit == "bytes":
-                    backup_instances_dict['size'] = i.size
+                    backup_instances_dict['size'] = float(i.size)
                 elif size_unit == "KB":
-                    backup_instances_dict['size'] = i.size / 1024
+                    backup_instances_dict['size'] = float(i.size / 1024)
                 elif size_unit == "MB":
-                    backup_instances_dict['size'] = i.size / 1048576
+                    backup_instances_dict['size'] = float(i.size / 1048576)
                 elif size_unit == "GB":
-                    backup_instances_dict['size'] = i.size / 1073741824
+                    backup_instances_dict['size'] = float(i.size / 1073741824)
                 elif size_unit == "TB":
-                    backup_instances_dict['size'] = i.size / 137438953472
+                    backup_instances_dict['size'] = float(i.size / 137438953472)
+
 
                 backup_instances_list.append(backup_instances_dict)
             sorted_backup_instances_list = sorted(backup_instances_list, key=itemgetter('date'))

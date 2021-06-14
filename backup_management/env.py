@@ -14,3 +14,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'gm4book01@gmail.com'
 EMAIL_HOST_PASSWORD = 'tinh0111'
 DEFAULT_FROM_EMAIL = 'BackupManagement'
+
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1']
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
+MEMCACHED = '127.0.0.1:11211'
+
+CRONJOB = '0 7 * * *'
