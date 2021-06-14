@@ -302,10 +302,11 @@ def send_mail():
     color['success'] = "#198754"
     color['missing'] = "#dc3545"
     color['warning'] = "#ffc107"
+    viewer_pw = env.VIEWER_PASS
     total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
     d = {'color': color, 'total_backups': total_backups, 'missing_backups': missing_backups,
          'success_backups': success_backups, 'warning_backups': warning_backups,
-         'backups': get_backup_list("total")}
+         'backups': get_backup_list("total"), 'viewer_pw': viewer_pw}
 
     try:
         subject = "Backup Report - " + str(date.today())

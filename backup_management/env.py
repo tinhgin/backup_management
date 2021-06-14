@@ -22,3 +22,4 @@ TIME_ZONE = 'Asia/Ho_Chi_Minh'
 MEMCACHED = '127.0.0.1:11211'
 
 CRONJOB = '0 7 * * *'
+VIEWER_PASS = 'cKx1wORKvh21'
