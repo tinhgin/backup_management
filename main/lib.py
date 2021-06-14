@@ -280,13 +280,13 @@ def get_storage_type_size():
     connection.close()
 
 def get_size_unit(size):
-    if size < 1024:
+    if size < 1000:
         return "bytes"
-    elif size < 1048576:
+    elif size < 1000000:
         return "KB"
-    elif size < 1073741824:
+    elif size < 1000000000:
         return "MB"
-    elif size < 137438953472:
+    elif size < 1000000000000:
         return "GB"
     else:
         return "TB"

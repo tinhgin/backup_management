@@ -103,15 +103,15 @@ def backup_detail(request, backup_name):
                     max_size = i.size
             size_unit = get_size_unit(max_size)
             if size_unit == "bytes":
-                pass
+                max_size = float(max_size)
             elif size_unit == "KB":
-                max_size = max_size / 1024
+                max_size = float(max_size / 1000)
             elif size_unit == "MB":
-                max_size = max_size / 1048576
+                max_size = float(max_size / 1000000)
             elif size_unit == "GB":
-                max_size = max_size / 1073741824
+                max_size = float(max_size / 1000000000)
             elif size_unit == "TB":
-                max_size = max_size / 137438953472
+                max_size = float(max_size / 1000000000000)
 
 
             if max_size < 10:
@@ -132,13 +132,13 @@ def backup_detail(request, backup_name):
                 if size_unit == "bytes":
                     backup_instances_dict['size'] = float(i.size)
                 elif size_unit == "KB":
-                    backup_instances_dict['size'] = float(i.size / 1024)
+                    backup_instances_dict['size'] = float(i.size / 1000)
                 elif size_unit == "MB":
-                    backup_instances_dict['size'] = float(i.size / 1048576)
+                    backup_instances_dict['size'] = float(i.size / 1000000)
                 elif size_unit == "GB":
-                    backup_instances_dict['size'] = float(i.size / 1073741824)
+                    backup_instances_dict['size'] = float(i.size / 1000000000)
                 elif size_unit == "TB":
-                    backup_instances_dict['size'] = float(i.size / 137438953472)
+                    backup_instances_dict['size'] = float(i.size / 1000000000000)
 
 
                 backup_instances_list.append(backup_instances_dict)
