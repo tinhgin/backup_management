@@ -3,6 +3,7 @@ import telegram
 from .models import Backup, BackupInstance, FSPath, S3Path, TotalBackup
 from django.db import connection
 from backup_management import env
+from operator import itemgetter
 
 
 def show_error(e):
@@ -143,7 +144,7 @@ def get_backup_list(status):
             if backup_status == status or status == "total":
                 backup_dict = {}
                 backup_dict['name'] = backup.name
-                backup_dict['project'] = backup.project
+                backup_dict['project'] = str(backup.project)
                 backup_dict['storage_type'] = backup.storage_type
                 backup_dict['latest_backup'] = latest_backup
                 backup_dict['latest_size'] = latest_size
@@ -303,10 +304,12 @@ def send_mail():
     color['missing'] = "#dc3545"
     color['warning'] = "#ffc107"
     viewer_pw = env.VIEWER_PASS
+    backup_list = sorted(get_backup_list("total"), key=itemgetter('project'))
+
     total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
     d = {'color': color, 'total_backups': total_backups, 'missing_backups': missing_backups,
          'success_backups': success_backups, 'warning_backups': warning_backups,
-         'backups': get_backup_list("total"), 'viewer_pw': viewer_pw}
+         'backups': backup_list, 'viewer_pw': viewer_pw}
 
     try:
         subject = "Backup Report - " + str(date.today())
