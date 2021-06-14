@@ -1,0 +1,119 @@
+{% load custom_tags %}
+
+<div style="color: #055160; background-color: #cff4fc; border-color: #b6effb; margin-bottom: 0.5rem !important;" role="alert">
+    <p>Backup Management v3 (dashboard included) is released. Check it out!</p>
+    Add host: 172.20.23.90  <a href="http://backup-management.isc.net">backup-management.isc.net</a>&#10;&#13;
+    <p>Viewer user: viewer | viewerpw</p>
+</div>
+
+<!-- Total Backups -->
+    <div style="flex: 0 0 auto; width: 10%; flex: 0 0 auto; width: 100%; margin-bottom: 0.5rem !important;">
+        <div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem; border-left: 0.25rem solid {{ color.total }} !important; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; height: 100% !important; padding-top: 0.5rem !important; padding-bottom: 0.5rem !important;">
+            <div style="flex: 1 1 auto; padding: 0.1rem 1rem;">
+                <div style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; display: flex; flex-wrap: wrap; margin-top: calc(var(--bs-gutter-y) * -1); margin-right: calc(var(--bs-gutter-x) / -2); margin-left: calc(var(--bs-gutter-x) / -2); margin-right: 0; margin-left: 0; align-items: center !important;">
+                    <div style="flex: 1 0 0%; margin-right: 0.5rem !important;">
+                        <div style="font-size: .7rem; font-weight: 700 !important; color: {{ color.total }} !important; text-transform: uppercase !important; margin-bottom: 0.25rem !important;">
+                            Total Backups</div>
+                        <div style="font-size: 1.25rem; margin-bottom: 0 !important; font-weight: 700 !important; color: #5a5c69 !important;">{{ total_backups }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Success Backups -->
+    <div style="flex: 0 0 auto; width: 10%; flex: 0 0 auto; width: 100%; margin-bottom: 0.5rem !important;">
+        <div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem; border-left: 0.25rem solid {{ color.success }} !important; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; height: 100% !important; padding-top: 0.5rem !important; padding-bottom: 0.5rem !important;">
+            <div style="flex: 1 1 auto; padding: 0.1rem 1rem;">
+                <div style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; display: flex; flex-wrap: wrap; margin-top: calc(var(--bs-gutter-y) * -1); margin-right: calc(var(--bs-gutter-x) / -2); margin-left: calc(var(--bs-gutter-x) / -2); margin-right: 0; margin-left: 0; align-items: center !important;">
+                    <div style="flex: 1 0 0%; margin-right: 0.5rem !important;">
+                        <div style="font-size: .7rem; font-weight: 700 !important; color: {{ color.success }} !important; text-transform: uppercase !important; margin-bottom: 0.25rem !important;">
+                            Success Backups</div>
+                        <div style="font-size: 1.25rem; margin-bottom: 0 !important; font-weight: 700 !important; color: #5a5c69 !important;">{{ success_backups }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Missing Backups -->
+    <div style="flex: 0 0 auto; width: 10%; flex: 0 0 auto; width: 100%; margin-bottom: 0.5rem !important;">
+        <div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem; border-left: 0.25rem solid {{ color.missing }} !important; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; height: 100% !important; padding-top: 0.5rem !important; padding-bottom: 0.5rem !important;">
+            <div style="flex: 1 1 auto; padding: 0.1rem 1rem;">
+                <div style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; display: flex; flex-wrap: wrap; margin-top: calc(var(--bs-gutter-y) * -1); margin-right: calc(var(--bs-gutter-x) / -2); margin-left: calc(var(--bs-gutter-x) / -2); margin-right: 0; margin-left: 0; align-items: center !important;">
+                    <div style="flex: 1 0 0%; margin-right: 0.5rem !important;">
+                        <div style="font-size: .7rem; font-weight: 700 !important; color: {{ color.missing }} !important; text-transform: uppercase !important; margin-bottom: 0.25rem !important;">
+                            Missing Backups</div>
+                        <div style="font-size: 1.25rem; margin-bottom: 0 !important; font-weight: 700 !important; color: #5a5c69 !important;">{{ missing_backups }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Warning Backups -->
+    <div style="flex: 0 0 auto; width: 10%; flex: 0 0 auto; width: 100%; margin-bottom: 0.5rem !important;">
+        <div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem; border-left: 0.25rem solid {{ color.warning }} !important; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; height: 100% !important; padding-top: 0.5rem !important; padding-bottom: 0.5rem !important;">
+            <div style="flex: 1 1 auto; padding: 0.1rem 1rem;">
+                <div style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; display: flex; flex-wrap: wrap; margin-top: calc(var(--bs-gutter-y) * -1); margin-right: calc(var(--bs-gutter-x) / -2); margin-left: calc(var(--bs-gutter-x) / -2); margin-right: 0; margin-left: 0; align-items: center !important;">
+                    <div style="flex: 1 0 0%; margin-right: 0.5rem !important;">
+                        <div style="font-size: .7rem; font-weight: 700 !important; color: {{ color.warning }} !important; text-transform: uppercase !important; margin-bottom: 0.25rem !important;">
+                            Warning Backups (size less than previous one)</div>
+                        <div style="font-size: 1.25rem; margin-bottom: 0 !important; font-weight: 700 !important; color: #5a5c69 !important;">{{ warning_backups }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<table style="width: 100%; --bs-table-bg: transparent; --bs-table-accent-bg: transparent; --bs-table-striped-color: #212529; --bs-table-striped-bg: rgba(0, 0, 0, 0.05); --bs-table-active-color: #212529; --bs-table-active-bg: rgba(0, 0, 0, 0.1); --bs-table-hover-color: #212529; --bs-table-hover-bg: rgba(0, 0, 0, 0.075); width: 100%; margin-bottom: 1rem; color: #212529; vertical-align: top; border-color: #dee2e6; border: 1px solid #e3e6f0;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Backup Name</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Project</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Storage Type</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Backup Server/S3Bucket</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Storage Path</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Latest Backup</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Latest Size</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Status</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Backup Name</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Project</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Storage Type</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Backup Server/S3Bucket</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Storage Path</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Latest Backup</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Latest Size</th>
+            <th style="border: 1px solid #e3e6f0;" bgcolor="#cfe2ff">Status</th>
+        </tr>
+    </tfoot>
+    <tbody>
+    {% for backup in backups %}
+        <tr>
+            {% if backup.status == "SUCCESS" %}
+                {% firstof "#65dd91" as bgcolor %}
+            {% endif %}
+            {% if backup.status == "MISSING" %}
+                {% firstof "#fe4c78" as bgcolor %}
+            {% endif %}
+            {% if backup.status == "WARNING (size less than yesterday backup size)" %}
+                {% firstof "#ffda1a" as bgcolor %}
+            {% endif %}
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.name }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.project }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.storage_type }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.serverip_s3bucket }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.storage_path }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.latest_backup }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.latest_size|sizeformat }}</td>
+            <td style="border: 1px solid #e3e6f0; background-color: {{ bgcolor }} !important; text-align: center !important;">{{ backup.status }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

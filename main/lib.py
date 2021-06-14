@@ -290,3 +290,30 @@ def get_size_unit(size):
         return "GB"
     else:
         return "TB"
+
+def send_mail():
+    from django.core.mail import EmailMultiAlternatives
+    from django.template.loader import get_template
+    from datetime import date
+
+    htmly = get_template('email.html')
+    color = {}
+    color['total'] = "#0d6efd"
+    color['success'] = "#198754"
+    color['missing'] = "#dc3545"
+    color['warning'] = "#ffc107"
+    total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
+    d = {'color': color, 'total_backups': total_backups, 'missing_backups': missing_backups,
+         'success_backups': success_backups, 'warning_backups': warning_backups,
+         'backups': get_backup_list("total")}
+
+    try:
+        subject = "Backup Report - " + str(date.today())
+        from_email = env.DEFAULT_FROM_EMAIL
+        to = env.MAIL_TO
+        html_content = htmly.render(d)
+        msg = EmailMultiAlternatives(subject=subject, from_email=from_email, to=to)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+    except Exception as e:
+        show_error(e)

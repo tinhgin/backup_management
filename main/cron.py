@@ -3,7 +3,7 @@ from .models import Backup, BackupInstance, FSPath, FSStorage
 import paramiko
 import datetime
 import pytz
-from .lib import show_error
+from .lib import show_error, send_mail
 import logging
 import sys
 from django.db import connection
@@ -68,7 +68,7 @@ def update_backup_instances_job():
                             # (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command("stat -c %s " + str(i.fs_storage) + filename)
                             (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command("du --byte -s " + str(i.fs_storage) + "/" + filename + " | awk '{print $1}'")
                             size = ssh_stdout2.readlines()[0].rstrip()
-                            date = datetime.datetime.fromtimestamp(int(date_str), pytz.timezone('Asia/Ho_Chi_Minh'))
+                            date = datetime.datetime.fromtimestamp(int(date_str), pytz.timezone(env.TIME_ZONE))
                             connection.close()
                             BackupInstance.objects.update_or_create(backup=i, file_name=filename, defaults={'date': date, 'size': int(size)})
                             print("create or update: " + str(i.fs_storage) + "/" + filename)
@@ -85,4 +85,6 @@ def update_backup_instances_job():
                 show_error(e)
     except Exception as e:
         show_error(e)
+
+    send_mail()
 

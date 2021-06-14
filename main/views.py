@@ -3,7 +3,7 @@ from .models import Backup, BackupInstance
 from django.contrib.auth.decorators import login_required
 from .lib import update_total_backups, get_total_pie_chart_data, get_total_line_chart_data, \
     get_total_line_chart_label, get_backup_count, get_storage_type_size, get_backup_list
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .lib import get_backup_status, get_latest_backup, get_latest_size, get_size_unit
 from operator import itemgetter
 

@@ -14,6 +14,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'gm4book01@gmail.com'
 EMAIL_HOST_PASSWORD = 'tinh0111'
 DEFAULT_FROM_EMAIL = 'BackupManagement'
+MAIL_TO = ['tinhhn.uit@gmail.com', 'gm4book02@gmail.com']
 
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1']
