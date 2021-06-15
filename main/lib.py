@@ -14,7 +14,7 @@ import fitz
 def show_error(e):
     chat_id = env.TELEGRAM_CHAT_ID
     try:
-        if env().str('PROXY') == '':
+        if env.PROXY == '':
             bot = telegram.Bot(token=env.TELEGRAM_BOT_TOKEN)
         else:
             pp = telegram.utils.request.Request(proxy_url=env.PROXY)
@@ -148,12 +148,7 @@ def get_backup_list(status):
                 backup_dict['latest_size'] = latest_size
                 backup_dict['status'] = backup_status
                 if backup.storage_type == "fs":
-                    fspath = FSPath.objects.filter(fs_path=backup.fs_storage)
-                    if fspath.count() == 0:
-                        server_ip = None
-                    else:
-                        server_ip = fspath[0].server_ip
-                    backup_dict['serverip_s3bucket'] = server_ip
+                    backup_dict['serverip_s3bucket'] = (str(backup.fs_storage)).split(":")[0]
                     backup_dict['storage_path'] = backup.fs_storage
                 if backup.storage_type == "s3":
                     s3path = S3Path.objects.filter(s3_path=backup.s3_storage)

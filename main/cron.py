@@ -22,7 +22,7 @@ def update_backup_instances_job():
             try:
                 if i.storage_type == "fs" and i.fs_storage != None:
                     try:
-                        server_ip = FSPath.objects.filter(fs_path__exact=i.fs_storage)[0].server_ip
+                        server_ip = (str(i.fs_storage)).split(":")[0]
                         fs_storage = FSStorage.objects.filter(server_ip__exact=str(server_ip))[0]
                         ssh_private_key = fs_storage.ssh_private_key
                         ssh_user = fs_storage.ssh_user
