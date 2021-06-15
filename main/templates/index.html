@@ -3,8 +3,19 @@
 {% block page_head %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a id="button_report" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+{#        <a id="button_report" href="{% url 'generate_report' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i#}
+{#            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>#}
+
+        <div class="dropdown">
+            <a id="generate_report" href="{% url 'generate_report' %}" class="dropdown-toggle d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="dropdown"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report </a>
+              <div class="dropdown-menu" aria-labelledby="generate_report">
+                <a id="button_report_pdf" class="dropdown-item" href="{% url 'report_pdf' %}">PDF</a>
+                <a id="button_report_png" class="dropdown-item" href="{% url 'report_png' %}">PNG</a>
+                <a class="dropdown-item" href="{% url 'report_webpage' %}">Webpage</a>
+              </div>
+        </div>
+
 </div>
 {% endblock %}
 
