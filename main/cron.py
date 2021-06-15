@@ -22,6 +22,7 @@ def update_backup_instances_job():
             try:
                 if i.storage_type == "fs" and i.fs_storage != None:
                     try:
+                        fs_path = (str(i.fs_storage)).split(":")[1]
                         server_ip = (str(i.fs_storage)).split(":")[0]
                         fs_storage = FSStorage.objects.filter(server_ip__exact=str(server_ip))[0]
                         ssh_private_key = fs_storage.ssh_private_key
@@ -41,16 +42,16 @@ def update_backup_instances_job():
 
                     for j in BackupInstance.objects.filter(backup__exact=i.name):
                         try:
-                            (ssh_stdin, ssh_stdout, ssh_stderr) = ssh.exec_command("ls " + str(i.fs_storage) + " | grep -q ^" + j.file_name + "$")
+                            (ssh_stdin, ssh_stdout, ssh_stderr) = ssh.exec_command("ls " + fs_path + " | grep -q ^" + j.file_name + "$")
                             exit_status = ssh_stdout.channel.recv_exit_status()
                             if exit_status == 1:
                                 j.delete()
-                                print("delete: " + str(i.fs_storage) + "/" + j.file_name)
+                                print("delete: " + fs_path + "/" + j.file_name)
                         except Exception as e:
                             show_error(e)
                         connection.close()
 
-                    cmd = "ls " + str(i.fs_storage) + " | grep " + i.name
+                    cmd = "ls " + fs_path + " | grep " + i.name
                     # Do command
                     (ssh_stdin, ssh_stdout, ssh_stderr) = ssh.exec_command(cmd)
                     # Get status code of command
@@ -61,19 +62,17 @@ def update_backup_instances_job():
                     for line in ssh_stdout.readlines():
                         try:
                             filename = line.rstrip()
-                            # (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command("stat -c %Z " + str(i.fs_storage) + filename)
-                            (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command('if [ "$(stat -c %F ' + str(i.fs_storage) + "/" + filename + ')" == "directory" ]; then find ' + str(i.fs_storage) + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Y ' + str(i.fs_storage) + "/" + filename + '; fi')
+                            (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command('if [ "$(stat -c %F ' + fs_path + "/" + filename + ')" == "directory" ]; then find ' + fs_path + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Y ' + fs_path + "/" + filename + '; fi')
                             try:
                                 date_str = ssh_stdout1.readlines()[0].rstrip()
                             except:
                                 continue
-                            # (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command("stat -c %s " + str(i.fs_storage) + filename)
-                            (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command("du --byte -s " + str(i.fs_storage) + "/" + filename + " | awk '{print $1}'")
+                            (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command("du --byte -s " + fs_path + "/" + filename + " | awk '{print $1}'")
                             size = ssh_stdout2.readlines()[0].rstrip()
                             date = datetime.datetime.fromtimestamp(int(date_str), pytz.timezone(env.TIME_ZONE))
                             connection.close()
                             BackupInstance.objects.update_or_create(backup=i, file_name=filename, defaults={'date': date, 'size': int(size)})
-                            print("create or update: " + str(i.fs_storage) + "/" + filename)
+                            print("create or update: " + fs_path + "/" + filename)
                         except Exception as e:
                             show_error(e)
                         connection.close()

@@ -9,7 +9,7 @@ from operator import itemgetter
 import time
 import uuid
 import fitz
-
+from datetime import datetime, timedelta
 
 def show_error(e):
     chat_id = env.TELEGRAM_CHAT_ID
@@ -57,12 +57,13 @@ def get_backup_status(backup_instances, latest_backup, latest_size):
     try:
         if latest_backup == None or latest_size == None:
             return "MISSING"
-        from datetime import datetime, timedelta
         previous_backup_size = get_previous_backup_size(backup_instances, latest_backup)
         now = datetime.now().date()
-        latest_backup = latest_backup + timedelta(hours=7)
+        if env.TIME_ZONE == 'Asia/Ho_Chi_Minh':
+            latest_backup = latest_backup + timedelta(hours=7)
+
         if latest_backup.date() >= now:
-            if latest_size < previous_backup_size and latest_size * 100 / previous_backup_size <= 99:
+            if latest_size * 100 / previous_backup_size <= 99:
                 return "WARNING (size less than yesterday backup size)"
             return "SUCCESS"
         else:
@@ -82,7 +83,7 @@ def get_latest_size(backup_instances, latest_backup):
             else:
                 latest_size = backup_instances.filter(date__exact=latest_backup)[0].size
                 for backup_instance in backup_instances:
-                    if backup_instance.date > backup_instances[0].date:
+                    if backup_instance.date > latest_size:
                         latest_size = backup_instance.size
                 return latest_size
     except Exception as e:
@@ -99,7 +100,7 @@ def get_latest_backup(backup_instances):
         else:
             latest_backup = backup_instances[0].date
             for backup_instance in backup_instances:
-                if backup_instance.date > backup_instances[0].date:
+                if backup_instance.date > latest_backup:
                     latest_backup = backup_instance.date
             return latest_backup
     except Exception as e:
@@ -149,7 +150,7 @@ def get_backup_list(status):
                 backup_dict['status'] = backup_status
                 if backup.storage_type == "fs":
                     backup_dict['serverip_s3bucket'] = (str(backup.fs_storage)).split(":")[0]
-                    backup_dict['storage_path'] = backup.fs_storage
+                    backup_dict['storage_path'] = (str(backup.fs_storage)).split(":")[1]
                 if backup.storage_type == "s3":
                     s3path = S3Path.objects.filter(s3_path=backup.s3_storage)
                     if s3path.count() == 0:
