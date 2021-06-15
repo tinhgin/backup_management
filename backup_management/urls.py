@@ -28,6 +28,10 @@ urlpatterns = [
     path('backup/missing/', views.missing_backups, name='missing_backups'),
     path('backup/warning/', views.warning_backups, name='warning_backups'),
     path('backup-detail/<str:backup_name>', views.backup_detail, name='backup-detail'),
+    path('backup/report/pdf', views.report_pdf, name='report_pdf'),
+    path('backup/report/png', views.report_png, name='report_png'),
+    path('backup/report/webpage', views.report_webpage, name='report_webpage'),
+    path('generate_report/', views.generate_report, name='generate_report'),
 ]
 
 
