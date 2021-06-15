@@ -10,13 +10,50 @@
             <a id="generate_report" href="{% url 'generate_report' %}" class="dropdown-toggle d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="dropdown"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report </a>
               <div class="dropdown-menu" aria-labelledby="generate_report">
-                <a id="button_report_pdf" class="dropdown-item" href="{% url 'report_pdf' %}">PDF</a>
-                <a id="button_report_png" class="dropdown-item" href="{% url 'report_png' %}">PNG</a>
+                <a id="button_report_pdf" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#wait_report_pdf">PDF</a>
+                <a id="button_report_png" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#wait_report_png">PNG</a>
                 <a class="dropdown-item" href="{% url 'report_webpage' %}">Webpage</a>
               </div>
         </div>
 
 </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="wait_report_pdf" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generate Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    It will take a while.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url 'report_pdf' %}';" data-bs-dismiss="modal">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="wait_report_png" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generate Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    It will take a while.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url 'report_png' %}';" data-bs-dismiss="modal">OK</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 {% endblock %}
 
 {% block row1 %}

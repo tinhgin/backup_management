@@ -327,6 +327,9 @@ def generate_report():
     from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.common.by import By
 
+    if not os.path.exists('reports'):
+        os.makedirs('reports')
+
     try:
         chrome_options = Options()
         chrome_options.add_argument('--headless')
