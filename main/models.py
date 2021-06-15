@@ -20,7 +20,8 @@ class Project(models.Model):
 
 
 class S3Storage(models.Model):
-    bucket = models.CharField(max_length=100, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    bucket = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     endpoint = models.CharField(max_length=100, null=True, blank=True)
     access_key_id = models.CharField(max_length=100)
@@ -35,7 +36,7 @@ class S3Storage(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}'.format(self.bucket)
+        return '{0}/{1}'.format(self.endpoint, self.bucket)
 
 
 class FSStorage(models.Model):
@@ -56,7 +57,8 @@ class FSStorage(models.Model):
 
 
 class S3Path(models.Model):
-    s3_path = models.CharField(max_length=100, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    s3_path = models.CharField(max_length=100)
     s3_bucket = models.ForeignKey('S3Storage', on_delete=models.RESTRICT, null=True)
 
     class Meta:
@@ -68,11 +70,12 @@ class S3Path(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}'.format(self.s3_path)
+        return '{0}/{1}'.format(self.s3_bucket, self.s3_path)
 
 
 class FSPath(models.Model):
-    fs_path = models.CharField(max_length=100, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    fs_path = models.CharField(max_length=100)
     server_ip = models.ForeignKey('FSStorage', on_delete=models.RESTRICT, null=True)
 
     class Meta:
@@ -84,7 +87,7 @@ class FSPath(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}'.format(self.fs_path)
+        return '{0}:{1}'.format(self.server_ip, self.fs_path)
 
 
 class Backup(models.Model):
@@ -106,20 +109,6 @@ class Backup(models.Model):
     s3_storage = models.ForeignKey('S3Path', on_delete=models.RESTRICT, null=True, blank=True)
     fs_storage = models.ForeignKey('FSPath', on_delete=models.RESTRICT, null=True, blank=True)
 
-    # STATUS = (
-    #     ('OK', 'OK'),
-    #     ('MISSING', 'Missing'),
-    #     ('WARNING', 'Size less than previous one'),
-    # )
-    #
-    # status = models.CharField(
-    #     max_length=7,
-    #     choices=STATUS,
-    #     blank=True,
-    #     default='MISSING',
-    #     help_text='Backup status')
-    #
-    # latest_size = models.PositiveBigIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['name']
