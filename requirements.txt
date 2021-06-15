@@ -5,5 +5,7 @@ mysqlclient==2.0.3
 python-telegram-bot==13.4.1
 telegram==0.0.1
 pymemcache==3.4.4
+selenium==3.141.0
+PyMuPDF==1.18.14
 
 elastic-apm==6.2.1
