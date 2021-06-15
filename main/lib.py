@@ -1,9 +1,14 @@
-import logging, sys, os
+import logging
+import sys
+import os
 import telegram
 from .models import Backup, BackupInstance, FSPath, S3Path, TotalBackup
 from django.db import connection
 from backup_management import env
 from operator import itemgetter
+import time
+import uuid
+import fitz
 
 
 def show_error(e):
@@ -17,7 +22,6 @@ def show_error(e):
     except:
         bot = telegram.Bot(token=env.TELEGRAM_BOT_TOKEN)
 
-
     logger = logging.getLogger('BACKUP-MANAGEMENT')
     logging.basicConfig(stream=sys.stdout, level=logging.ERROR)
 
@@ -29,7 +33,6 @@ def show_error(e):
         bot.sendMessage(chat_id=chat_id, text=error, parse_mode="Markdown")
     except Exception as e:
         logger.error(e)
-
 
 
 def get_previous_backup_size(backup_instances, latest_backup):
@@ -50,7 +53,6 @@ def get_previous_backup_size(backup_instances, latest_backup):
         show_error(e)
 
 
-
 def get_backup_status(backup_instances, latest_backup, latest_size):
     try:
         if latest_backup == None or latest_size == None:
@@ -60,14 +62,13 @@ def get_backup_status(backup_instances, latest_backup, latest_size):
         now = datetime.now().date()
         latest_backup = latest_backup + timedelta(hours=7)
         if latest_backup.date() >= now:
-            if latest_size < previous_backup_size and latest_size*100/previous_backup_size <= 99:
+            if latest_size < previous_backup_size and latest_size * 100 / previous_backup_size <= 99:
                 return "WARNING (size less than yesterday backup size)"
             return "SUCCESS"
         else:
             return "MISSING"
     except Exception as e:
         show_error(e)
-
 
 
 def get_latest_size(backup_instances, latest_backup):
@@ -88,7 +89,6 @@ def get_latest_size(backup_instances, latest_backup):
         show_error(e)
 
 
-
 def get_latest_backup(backup_instances):
     try:
         backup_instances_count = backup_instances.count()
@@ -104,7 +104,6 @@ def get_latest_backup(backup_instances):
             return latest_backup
     except Exception as e:
         show_error(e)
-
 
 
 def get_backup_count():
@@ -129,7 +128,6 @@ def get_backup_count():
     except Exception as e:
         show_error(e)
     connection.close()
-
 
 
 def get_backup_list(status):
@@ -166,11 +164,11 @@ def get_backup_list(status):
                     backup_dict['serverip_s3bucket'] = s3bucket
                     backup_dict['storage_path'] = backup.s3_storage
                 backup_list.append(backup_dict)
-        return  backup_list
+        sorted_backup_list = sorted(backup_list, key=itemgetter('project'))
+        return sorted_backup_list
     except Exception as e:
         show_error(e)
     connection.close()
-
 
 
 def get_total_line_chart_label():
@@ -199,7 +197,6 @@ def get_total_line_chart_label():
         show_error(e)
 
 
-
 def get_total_line_chart_data():
     try:
         line_data = {}
@@ -221,7 +218,6 @@ def get_total_line_chart_data():
     except Exception as e:
         show_error(e)
     connection.close()
-
 
 
 def update_total_backups():
@@ -250,7 +246,6 @@ def get_total_pie_chart_data():
         show_error(e)
 
 
-
 def get_storage_type_size():
     try:
         size_s3 = {}
@@ -273,12 +268,13 @@ def get_storage_type_size():
             size_s3['percent'] = 0
             size_fs['percent'] = 0
         else:
-            size_s3['percent'] = size_s3['size']*100/total_size
-            size_fs['percent'] = size_fs['size']*100/total_size
+            size_s3['percent'] = size_s3['size'] * 100 / total_size
+            size_fs['percent'] = size_fs['size'] * 100 / total_size
         return total_size, size_s3, size_fs
     except Exception as e:
         show_error(e)
     connection.close()
+
 
 def get_size_unit(size):
     if size < 1000:
@@ -292,6 +288,7 @@ def get_size_unit(size):
     else:
         return "TB"
 
+
 def send_mail():
     from django.core.mail import EmailMultiAlternatives
     from django.template.loader import get_template
@@ -304,7 +301,7 @@ def send_mail():
     color['missing'] = "#dc3545"
     color['warning'] = "#ffc107"
     viewer_pw = env.VIEWER_PASS
-    backup_list = sorted(get_backup_list("total"), key=itemgetter('project'))
+    backup_list = get_backup_list("total")
 
     total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
     d = {'color': color, 'total_backups': total_backups, 'missing_backups': missing_backups,
@@ -321,3 +318,60 @@ def send_mail():
         msg.send()
     except Exception as e:
         show_error(e)
+
+
+def generate_report():
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.by import By
+
+    try:
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        d = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
+
+        file_name = "reports/" + str(uuid.uuid4())
+
+        d.get('http://127.0.0.1:8000/accounts/login/?next=/backup/report/webpage')
+        WebDriverWait(d, 10).until(EC.element_to_be_clickable((By.NAME, 'submit')))
+
+        username = d.find_element_by_id("exampleInputEmail")
+        password = d.find_element_by_id("exampleInputPassword")
+
+        username.send_keys("viewer")
+        password.send_keys(env.VIEWER_PASS)
+
+        d.find_element_by_name("submit").click()
+
+        WebDriverWait(d, 10).until(EC.presence_of_element_located((By.XPATH, '//div[@class="container-fluid"]')))
+
+        # the element with longest height on page
+        ele = d.find_element("xpath", '//div[@class="container-fluid"]')
+        total_height = ele.size["height"] + 0
+
+        d.set_window_size(1500, total_height)  # the trick
+        time.sleep(1)
+        d.save_screenshot(file_name + ".png")
+        # d.execute_script('window.print();')
+
+        doc = fitz.open()  # PDF with the pictures
+        img = fitz.open(file_name + ".png")  # open pic as document
+        rect = img[0].rect  # pic dimension
+        pdfbytes = img.convertToPDF()  # make a PDF stream
+        img.close()  # no longer needed
+        imgPDF = fitz.open("pdf", pdfbytes)  # open stream as PDF
+        page = doc.newPage(width=rect.width,  # new page with ...
+                           height=rect.height)  # pic dimension
+        page.showPDFpage(rect, imgPDF, 0)
+        # image fills the page
+        doc.save(file_name + ".pdf")
+        d.close()
+
+        return file_name
+    except Exception as e:
+        show_error(e)
+        return None
