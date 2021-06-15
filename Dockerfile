@@ -3,7 +3,6 @@ FROM python:3.9.5
 LABEL maintainer="tinhhn.uit@gmail.com"
 
 RUN apt-get update && apt-get -y install cron memcached unzip xvfb libxi6 libgconf-2-4 default-jdk vim \
-#    && rm -rf /var/lib/apt/lists/*  \
     && ln -snf /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime  \
     && echo "Asia/Ho_Chi_Minh" > /etc/timezone  \
     && curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add    \
@@ -13,7 +12,9 @@ RUN apt-get update && apt-get -y install cron memcached unzip xvfb libxi6 libgco
     && wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip   \
     && unzip chromedriver_linux64.zip   \
     && mv chromedriver /usr/bin/chromedriver    \
-    && chmod +x /usr/bin/chromedriver
+    && chmod +x /usr/bin/chromedriver   \
+    && rm -f chromedriver_linux64.zip   \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
