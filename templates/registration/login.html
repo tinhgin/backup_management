@@ -49,13 +49,13 @@
                                         {% csrf_token %}
                                         <table>
                                           <div class="form-group">
-                                              <input name="username" type="text" class="form-control form-control-user" id="exampleInputEmailx" aria-describedby="emailHelpx" placeholder="Username">
+                                              <input name="username" type="text" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelpx" placeholder="Username">
                                           </div>
                                           <div class="form-group">
                                             <input name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
                                           </div>
                                         </table>
-                                        <input type="submit" value="Login" class="btn btn-primary btn-user btn-block" />
+                                        <input name="submit" type="submit" value="Login" class="btn btn-primary btn-user btn-block" />
                                         <input type="hidden" name="next" value="{{ next }}" />
                                       </form>
 
