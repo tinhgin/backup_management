@@ -8,6 +8,8 @@ import logging
 import sys
 from django.db import connection
 from backup_management import env
+import os
+import shutil
 
 logger = logging.getLogger('BACKUP-MANAGEMENT')
 logging.basicConfig(stream=sys.stdout, level=logging.ERROR)
@@ -88,3 +90,16 @@ def update_backup_instances_job():
 
     send_mail()
 
+
+@kronos.register('0 0 * * *')
+def delete_tmp_report():
+    folder = 'reports'
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            show_error(e)
