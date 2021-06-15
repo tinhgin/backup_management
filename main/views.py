@@ -3,9 +3,10 @@ from .models import Backup, BackupInstance
 from django.contrib.auth.decorators import login_required
 from .lib import update_total_backups, get_total_pie_chart_data, get_total_line_chart_data, \
     get_total_line_chart_label, get_backup_count, get_storage_type_size, get_backup_list
-from django.http import Http404, HttpResponse
-from .lib import get_backup_status, get_latest_backup, get_latest_size, get_size_unit
+from django.http import Http404, HttpResponse, FileResponse
+from .lib import get_backup_status, get_latest_backup, get_latest_size, get_size_unit, generate_report
 from operator import itemgetter
+from datetime import date
 
 
 @login_required
@@ -24,7 +25,8 @@ def index(request):
         'index.html',
         context={'total_backups': total_backups, 'missing_backups': missing_backups,
                  'success_backups': success_backups, 'warning_backups': warning_backups, 'line_label': line_label,
-                 'line_data': line_data, 'pie_data': pie_data, 'size_s3': size_s3, 'size_fs': size_fs, 'total_size': total_size},
+                 'line_data': line_data, 'pie_data': pie_data, 'size_s3': size_s3, 'size_fs': size_fs,
+                 'total_size': total_size},
     )
 
 
@@ -39,6 +41,7 @@ def total_backups(request):
         context={'total_backups': total_backups, 'backups': get_backup_list("total")},
     )
 
+
 @login_required
 def success_backups(request):
     success_backups = get_backup_count()[1]
@@ -49,6 +52,7 @@ def success_backups(request):
         'success_backups.html',
         context={'success_backups': success_backups, 'backups': get_backup_list("SUCCESS")},
     )
+
 
 @login_required
 def missing_backups(request):
@@ -61,6 +65,7 @@ def missing_backups(request):
         context={'missing_backups': missing_backups, 'backups': get_backup_list("MISSING")},
     )
 
+
 @login_required
 def warning_backups(request):
     warning_backups = get_backup_count()[3]
@@ -69,7 +74,8 @@ def warning_backups(request):
     return render(
         request,
         'warning_backups.html',
-        context={'warning_backups': warning_backups, 'backups': get_backup_list("WARNING (size less than yesterday backup size)")},
+        context={'warning_backups': warning_backups,
+                 'backups': get_backup_list("WARNING (size less than yesterday backup size)")},
     )
 
 
@@ -113,18 +119,17 @@ def backup_detail(request, backup_name):
             elif size_unit == "TB":
                 max_size = float(max_size / 1000000000000)
 
-
             if max_size < 10:
-                max_size = (int(max_size%10)) + 1
+                max_size = (int(max_size % 10)) + 1
                 max_tick = max_size + 1
             else:
                 max_tick = 12
                 if max_size < 100:
-                    if max_size%10 != 0:
-                        max_size = (int(max_size/10))*10 + 10
+                    if max_size % 10 != 0:
+                        max_size = (int(max_size / 10)) * 10 + 10
                 else:
-                    if max_size%100 != 0:
-                        max_size = (int(max_size/100)) * 100 + 100
+                    if max_size % 100 != 0:
+                        max_size = (int(max_size / 100)) * 100 + 100
             backup_instances_list = []
             for i in backup_instances:
                 backup_instances_dict = {}
@@ -140,10 +145,8 @@ def backup_detail(request, backup_name):
                 elif size_unit == "TB":
                     backup_instances_dict['size'] = float(i.size / 1000000000000)
 
-
                 backup_instances_list.append(backup_instances_dict)
             sorted_backup_instances_list = sorted(backup_instances_list, key=itemgetter('date'))
-
 
         return render(
             request,
@@ -155,3 +158,42 @@ def backup_detail(request, backup_name):
         )
     else:
         raise Http404
+
+
+@login_required
+def report_webpage(request):
+    total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
+
+    update_total_backups()
+    line_label = get_total_line_chart_label()
+    line_data = get_total_line_chart_data()
+    pie_data = get_total_pie_chart_data()
+    total_size, size_s3, size_fs = get_storage_type_size()
+    today = date.today()
+
+    # Render the HTML template index.html with the data in the context variable.
+    return render(
+        request,
+        'report.html',
+        context={'total_backups': total_backups, 'missing_backups': missing_backups,
+                 'success_backups': success_backups, 'warning_backups': warning_backups, 'line_label': line_label,
+                 'line_data': line_data, 'pie_data': pie_data, 'size_s3': size_s3, 'size_fs': size_fs,
+                 'total_size': total_size, 'backups': get_backup_list("total"), 'today': today},
+    )
+
+
+@login_required
+def report_pdf(request):
+    file_name = generate_report()
+    if file_name == None:
+        return HttpResponse(status=500)
+    else:
+        return FileResponse(open(file_name + '.pdf', 'rb'), content_type='application/pdf')
+
+@login_required
+def report_png(request):
+    file_name = generate_report()
+    if file_name == None:
+        return HttpResponse(status=500)
+    else:
+        return FileResponse(open(file_name + '.png', 'rb'), content_type='image/png')
