@@ -3,6 +3,8 @@ register = template.Library()
 
 
 def sizeformat(value):
+    if value == None:
+        return None
     if value < 1000:
         if value < 2:
             return str(value) + " byte"
