@@ -149,8 +149,12 @@ def get_backup_list(status):
                 backup_dict['latest_size'] = latest_size
                 backup_dict['status'] = backup_status
                 if backup.storage_type == "fs":
-                    backup_dict['serverip_s3bucket'] = (str(backup.fs_storage)).split(":")[0]
-                    backup_dict['storage_path'] = (str(backup.fs_storage)).split(":")[1]
+                    if backup.fs_storage == None:
+                        backup_dict['serverip_s3bucket'] = None
+                        backup_dict['storage_path'] = None
+                    else:
+                        backup_dict['serverip_s3bucket'] = (str(backup.fs_storage)).split(":")[0]
+                        backup_dict['storage_path'] = (str(backup.fs_storage)).split(":")[1]
                 if backup.storage_type == "s3":
                     s3path = S3Path.objects.filter(s3_path=backup.s3_storage)
                     if s3path.count() == 0:
