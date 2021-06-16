@@ -471,6 +471,14 @@
          })
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('#dataTable_backups').DataTable( {
+                "order": [[ 1, "asc" ]]
+             } );
+        } );
+    </script>
+
     {% block js_table %}{% endblock %}
 
 
