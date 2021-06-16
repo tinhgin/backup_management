@@ -86,7 +86,7 @@ def get_latest_size(backup_instances, latest_backup):
             else:
                 latest_size = backup_instances.filter(date__exact=latest_backup)[0].size
                 for backup_instance in backup_instances:
-                    if backup_instance.size > latest_size:
+                    if backup_instance.date > latest_backup:
                         latest_size = backup_instance.size
                 return latest_size
     except Exception as e:
