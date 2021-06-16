@@ -280,13 +280,13 @@ var myLineChart = new Chart(ctx, {
     labels: ["{{ line_label.1 }}", "{{ line_label.2 }}", "{{ line_label.3 }}", "{{ line_label.4 }}", "{{ line_label.5 }}", "{{ line_label.6 }}", "{{ line_label.7 }}", "{{ line_label.8 }}", "{{ line_label.9 }}", "{{ line_label.10 }}", "{{ line_label.11 }}", "{{ line_label.12 }}"],
     datasets: [{
       label: "Total backups",
-      lineTension: 0.3,
+      lineTension: 0,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
       borderColor: "rgba(78, 115, 223, 1)",
-      pointRadius: 3,
+      pointRadius: 5,
       pointBackgroundColor: "rgba(78, 115, 223, 1)",
       pointBorderColor: "rgba(78, 115, 223, 1)",
-      pointHoverRadius: 3,
+      pointHoverRadius: 8,
       pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
@@ -314,12 +314,12 @@ var myLineChart = new Chart(ctx, {
           drawBorder: false
         },
         ticks: {
-          maxTicksLimit: 7
+          maxTicksLimit: 12
         }
       }],
       yAxes: [{
         ticks: {
-          maxTicksLimit: 5,
+          maxTicksLimit: {{ max_tick }},
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
