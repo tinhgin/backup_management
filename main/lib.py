@@ -150,6 +150,8 @@ def get_backup_list(status):
                 backup_dict['name'] = backup.name
                 backup_dict['project'] = str(backup.project)
                 backup_dict['storage_type'] = backup.storage_type
+                backup_dict['keep'] = backup.keep
+                backup_dict['current_instances'] = backup_instances.count()
                 backup_dict['latest_backup'] = latest_backup
                 backup_dict['latest_size'] = latest_size
                 backup_dict['status'] = backup_status

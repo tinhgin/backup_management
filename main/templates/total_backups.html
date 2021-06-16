@@ -49,8 +49,9 @@
                                             <th>Backup Name</th>
                                             <th>Project</th>
                                             <th>Storage Type</th>
-                                            <th>Backup Server/S3Bucket</th>
+                                            <th>Backup Server - S3Bucket</th>
                                             <th>Storage Path</th>
+                                            <th>Current Backup Instances/Backup Retention</th>
                                             <th>Latest Backup</th>
                                             <th>Latest Size</th>
                                             <th>Status</th>
@@ -61,8 +62,9 @@
                                             <th>Backup Name</th>
                                             <th>Project</th>
                                             <th>Storage Type</th>
-                                            <th>Backup Server/S3Bucket</th>
+                                            <th>Backup Server - S3Bucket</th>
                                             <th>Storage Path</th>
+                                            <th>Current Backup Instances/Backup Retention</th>
                                             <th>Latest Backup</th>
                                             <th>Latest Size</th>
                                             <th>Status</th>
@@ -85,6 +87,7 @@
                                             <td>{{ backup.storage_type }}</td>
                                             <td>{{ backup.serverip_s3bucket }}</td>
                                             <td>{{ backup.storage_path }}</td>
+                                            <td>{{ backup.current_instances }}/{{ backup.keep }}</td>
                                             <td>{{ backup.latest_backup }}</td>
                                             <td>{{ backup.latest_size|sizeformat }}</td>
                                             <td>{{ backup.status }}</td>
