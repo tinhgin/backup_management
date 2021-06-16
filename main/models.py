@@ -108,6 +108,7 @@ class Backup(models.Model):
 
     s3_storage = models.ForeignKey('S3Path', on_delete=models.RESTRICT, null=True, blank=True)
     fs_storage = models.ForeignKey('FSPath', on_delete=models.RESTRICT, null=True, blank=True)
+    keep = models.PositiveIntegerField(default=35)
 
 
     class Meta:
