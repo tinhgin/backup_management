@@ -9,7 +9,10 @@ from operator import itemgetter
 import time
 import uuid
 import fitz
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+import pytz
+from dateutil.tz import tzutc
+from dateutil import tz
 
 def show_error(e):
     chat_id = env.TELEGRAM_CHAT_ID
@@ -59,8 +62,8 @@ def get_backup_status(backup_instances, latest_backup, latest_size):
             return "MISSING"
         previous_backup_size = get_previous_backup_size(backup_instances, latest_backup)
         now = datetime.now().date()
-        if env.TIME_ZONE == 'Asia/Ho_Chi_Minh':
-            latest_backup = latest_backup + timedelta(hours=7)
+        to_zone = tz.gettz(env.TIME_ZONE)
+        latest_backup = latest_backup.astimezone(to_zone)
 
         if latest_backup.date() >= now:
             if latest_size < previous_backup_size and latest_size * 100 / previous_backup_size <= 99:
@@ -103,6 +106,8 @@ def get_latest_backup(backup_instances):
                 if backup_instance.date > latest_backup:
                     latest_backup = backup_instance.date
             return latest_backup
+
+
     except Exception as e:
         show_error(e)
 
@@ -156,13 +161,14 @@ def get_backup_list(status):
                         backup_dict['serverip_s3bucket'] = (str(backup.fs_storage)).split(":")[0]
                         backup_dict['storage_path'] = (str(backup.fs_storage)).split(":")[1]
                 if backup.storage_type == "s3":
-                    s3path = S3Path.objects.filter(s3_path=backup.s3_storage)
-                    if s3path.count() == 0:
-                        s3bucket = None
+                    if backup.s3_storage == None:
+                        backup_dict['serverip_s3bucket'] = None
+                        backup_dict['storage_path'] = None
                     else:
-                        s3bucket = s3path[0].s3_bucket
-                    backup_dict['serverip_s3bucket'] = s3bucket
-                    backup_dict['storage_path'] = backup.s3_storage
+                        for i in S3Path.objects.all():
+                            if str(i.s3_bucket) + str(i.s3_path) == str(backup.s3_storage):
+                                backup_dict['serverip_s3bucket'] = str(i.s3_bucket)
+                                backup_dict['storage_path'] = str(i.s3_path)
                 backup_list.append(backup_dict)
         sorted_backup_list = sorted(backup_list, key=itemgetter('project'))
         return sorted_backup_list

@@ -70,7 +70,7 @@ class S3Path(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}/{1}'.format(self.s3_bucket, self.s3_path)
+        return '{0}{1}'.format(self.s3_bucket, self.s3_path)
 
 
 class FSPath(models.Model):

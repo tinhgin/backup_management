@@ -1,5 +1,5 @@
 import kronos
-from .models import Backup, BackupInstance, FSPath, FSStorage
+from .models import Backup, BackupInstance, FSPath, FSStorage, S3Storage
 import paramiko
 import datetime
 import pytz
@@ -10,6 +10,7 @@ from django.db import connection
 from backup_management import env
 import os
 import shutil
+import boto3
 
 logger = logging.getLogger('BACKUP-MANAGEMENT')
 logging.basicConfig(stream=sys.stdout, level=logging.ERROR)
@@ -80,8 +81,56 @@ def update_backup_instances_job():
                     # Close ssh connect
                     ssh.close()
 
-                else:
-                    pass
+                elif i.storage_type == "s3" and i.s3_storage != None:
+                    try:
+                        for k in S3Storage.objects.all():
+                            if str(k.endpoint) in str(i.s3_storage) and str(k.bucket) in str(i.s3_storage):
+                                aws_access_key_id = k.access_key_id
+                                aws_secret_access_key = k.secret_access_key
+                                endpoint_url = str(k.endpoint)
+                                bucket = str(k.bucket)
+                    except Exception as e:
+                        show_error(e)
+                    s3_resource = boto3.resource(
+                        service_name='s3',
+                        aws_access_key_id=aws_access_key_id,
+                        aws_secret_access_key=aws_secret_access_key,
+                        endpoint_url=endpoint_url,
+                    )
+                    s3_client = boto3.client(
+                        service_name='s3',
+                        aws_access_key_id=aws_access_key_id,
+                        aws_secret_access_key=aws_secret_access_key,
+                        endpoint_url=endpoint_url,
+                    )
+                    s3_path = (str(i.s3_storage)).split(bucket)[1]
+                    if s3_path[0] == "/":
+                        s3_path = s3_path[1:len(s3_path)]
+                    for j in BackupInstance.objects.filter(backup__exact=i.name):
+                        try:
+                            try:
+                                s3_resource.Object(bucket, s3_path + '/' + j.file_name).load()
+                            except:
+                                j.delete()
+                                connection.close()
+                                print("delete: " + endpoint_url + "/" + bucket + "/" + s3_path + '/' + j.file_name)
+                        except Exception as e:
+                            show_error(e)
+
+
+                    for m in s3_client.list_objects(Bucket=bucket)['Contents']:
+                        try:
+                            if s3_path in m['Key'] and i.name in m['Key']:
+                                s3filename = m['Key'].split("/")[-1]
+                                s3date = m['LastModified']
+                                s3size = m['Size']
+                                BackupInstance.objects.update_or_create(backup=i, file_name=s3filename,
+                                                                        defaults={'date': s3date, 'size': int(s3size)})
+                                connection.close()
+                                print("create or update: " + endpoint_url + "/" + bucket + "/" + s3_path + '/' + s3filename)
+                        except Exception as e:
+                            show_error(e)
+
             except Exception as e:
                 show_error(e)
     except Exception as e:
