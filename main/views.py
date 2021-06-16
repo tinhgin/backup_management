@@ -20,11 +20,14 @@ def index(request):
     total_size, size_s3, size_fs = get_storage_type_size()
 
     total_backups_by_month = TotalBackup.objects.all()
-    max_tick = total_backups_by_month[0].total
+    max_backup = total_backups_by_month[0].total
+    min_backup = max_backup
     for i in TotalBackup.objects.all():
-        if i.total > max_tick:
-            max_tick = i.total
-    max_tick += 3
+        if i.total > max_backup:
+            max_backup = i.total
+        if i.total < min_backup:
+            min_backup = i.total
+    max_tick = max_backup - min_backup + 3
 
     # Render the HTML template index.html with the data in the context variable.
     return render(
@@ -179,11 +182,14 @@ def report_webpage(request):
     today = date.today()
 
     total_backups_by_month = TotalBackup.objects.all()
-    max_tick = total_backups_by_month[0].total
+    max_backup = total_backups_by_month[0].total
+    min_backup = max_backup
     for i in TotalBackup.objects.all():
-        if i.total > max_tick:
-            max_tick = i.total
-    max_tick += 3
+        if i.total > max_backup:
+            max_backup = i.total
+        if i.total < min_backup:
+            min_backup = i.total
+    max_tick = max_backup - min_backup + 3
 
     # Render the HTML template index.html with the data in the context variable.
     return render(
