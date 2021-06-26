@@ -18,6 +18,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'BackupManagement'
 MAIL_TO = os.environ.get('MAIL_TO')
 
+HOST = os.environ.get('HOST')
+
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 TIME_ZONE = 'Asia/Ho_Chi_Minh'

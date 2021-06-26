@@ -3,18 +3,19 @@ services:
   backup-management:
     image: tinhgin/backup_management
     environment:
-      - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
-      - TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID
-      - PROXY=PROXY
-      - DB_NAME=DB_NAME
-      - DB_USER=DB_USER
-      - DB_PASSWORD=DB_PASSWORD
-      - DB_HOST=DB_HOST
-      - DB_PORT=DB_PORT
-      - EMAIL_HOST_USER=EMAIL_HOST_USER
-      - EMAIL_HOST_PASSWORD=EMAIL_HOST_PASSWORD
-      - MAIL_TO=MAIL_TO
-      - VIEWER_PASS=VIEWER_PASS
+      - TELEGRAM_BOT_TOKEN=18455xxxxx:AAFHh5eJ5JOhakPg4NCI6qc0Mxxxxxxxxxx
+      - TELEGRAM_CHAT_ID=-5739xxxxx
+      #- PROXY=PROXY
+      - DB_NAME=xxxxx
+      - DB_USER=xxxxx
+      - DB_PASSWORD=xxxxx
+      - DB_HOST=xxxxx
+      - DB_PORT=3306
+      - EMAIL_HOST_USER=example@gmail.com
+      - EMAIL_HOST_PASSWORD=xxxxx
+      - MAIL_TO=example1@gmail.com, example2@gmail.com
+      - VIEWER_PASS=xxxxx
+      - HOST=https://backup.example.com
     ports:
       - 8000:8000
     depends_on:
@@ -27,10 +28,10 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpw
-      MYSQL_DATABASE: backup
-      MYSQL_USER: backup_user
-      MYSQL_PASSWORD: backuppw
+      MYSQL_ROOT_PASSWORD: xxxxx
+      MYSQL_DATABASE: xxxxx
+      MYSQL_USER: xxxxx
+      MYSQL_PASSWORD: xxxxx
 
 #  adminer:
 #    image: adminer

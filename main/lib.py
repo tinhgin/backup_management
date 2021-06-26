@@ -310,16 +310,17 @@ def send_mail():
     color['warning'] = "#ffc107"
     viewer_pw = env.VIEWER_PASS
     backup_list = get_backup_list("total")
+    host =  env.HOST
 
     total_backups, success_backups, missing_backups, warning_backups = get_backup_count()
     d = {'color': color, 'total_backups': total_backups, 'missing_backups': missing_backups,
          'success_backups': success_backups, 'warning_backups': warning_backups,
-         'backups': backup_list, 'viewer_pw': viewer_pw}
+         'backups': backup_list, 'viewer_pw': viewer_pw, 'host': host}
 
     try:
         subject = "Backup Report - " + str(date.today())
         from_email = env.DEFAULT_FROM_EMAIL
-        to = env.MAIL_TO
+        to = env.MAIL_TO.replace(" ","").split(",")
         html_content = htmly.render(d)
         msg = EmailMultiAlternatives(subject=subject, from_email=from_email, to=to)
         msg.attach_alternative(html_content, "text/html")
