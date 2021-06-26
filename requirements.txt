@@ -10,4 +10,4 @@ PyMuPDF==1.18.14
 boto3==1.17.95
 
 
-elastic-apm==6.2.1
+#elastic-apm==6.2.1
