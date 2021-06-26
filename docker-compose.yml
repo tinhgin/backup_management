@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   backup-management:
-    image:
+    image: tinhgin/backup_management
     environment:
       - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
       - TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID
