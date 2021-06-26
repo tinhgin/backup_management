@@ -1,9 +1,20 @@
 version: '3.7'
 services:
   backup-management:
-    build: ./
-    volumes:
-      - C:\Users\tinhh\PycharmProjects\django_projects\backup_management:/app
+    image:
+    environment:
+      - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
+      - TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID
+      - PROXY=PROXY
+      - DB_NAME=DB_NAME
+      - DB_USER=DB_USER
+      - DB_PASSWORD=DB_PASSWORD
+      - DB_HOST=DB_HOST
+      - DB_PORT=DB_PORT
+      - EMAIL_HOST_USER=EMAIL_HOST_USER
+      - EMAIL_HOST_PASSWORD=EMAIL_HOST_PASSWORD
+      - MAIL_TO=MAIL_TO
+      - VIEWER_PASS=VIEWER_PASS
     ports:
       - 8000:8000
     depends_on:
@@ -21,11 +32,11 @@ services:
       MYSQL_USER: backup_user
       MYSQL_PASSWORD: backuppw
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080
 
 volumes:
   mysql:

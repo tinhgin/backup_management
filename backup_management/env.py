@@ -1,25 +1,27 @@
-TELEGRAM_BOT_TOKEN = '1845506332:AAFHh5eJ5JOhakPg4NCI6qc0MJ1ybpMT0tk'
-TELEGRAM_CHAT_ID = '-573997398'
-PROXY = ''
+import os
 
-DB_NAME = 'backup'
-DB_USER = 'backup_user'
-DB_PASSWORD = 'backuppw'
-DB_HOST = 'mysql'
-DB_PORT = '3306'
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
+PROXY = os.environ.get('PROXY')
+
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'gm4book01@gmail.com'
-EMAIL_HOST_PASSWORD = 'tinh0111'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'BackupManagement'
-MAIL_TO = ['tinhhn.uit@gmail.com', 'gm4book02@gmail.com']
+MAIL_TO = os.environ.get('MAIL_TO')
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1']
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
 MEMCACHED = '127.0.0.1:11211'
 
 CRONJOB = '0 7 * * *'
-VIEWER_PASS = 'cKx1wORKvh21'
+VIEWER_PASS = os.environ.get('VIEWER_PASS')
