@@ -19,7 +19,7 @@ DEFAULT_FROM_EMAIL = 'BackupManagement'
 MAIL_TO = os.environ.get('MAIL_TO')
 
 DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0']
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
 MEMCACHED = '127.0.0.1:11211'
 
