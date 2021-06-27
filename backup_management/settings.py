@@ -176,6 +176,6 @@ CACHES = {
     }
 }
 
-KRONOS_PREFIX = 'for i in `env`; do export $i; done; cd {};'.format(BASE_DIR)
+KRONOS_PREFIX = 'env - `cat {}/env`; cd {};'.format(BASE_DIR,BASE_DIR)
 
 

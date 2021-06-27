@@ -25,4 +25,4 @@ RUN pip install -r requirements.txt
 COPY . /app/
 
 
-CMD service memcached start && cron && python manage.py installtasks && python manage.py runserver 0.0.0.0:8000 --insecure
+CMD env > env; service memcached start && cron && python manage.py installtasks && python manage.py runserver 0.0.0.0:8000 --insecure
