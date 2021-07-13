@@ -107,7 +107,7 @@ def update_backup_instances_job():
                         try:
                             filename = line.rstrip()
                             (ssh_stdin1, ssh_stdout1, ssh_stderr1) = ssh.exec_command(
-                                'if [ "$(stat -c %F ' + fs_path + "/" + filename + ')" == "directory" ]; then find ' + fs_path + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Y ' + fs_path + "/" + filename + '; fi')
+                                'if [ "$(stat -c %F ' + fs_path + "/" + filename + ')" == "directory" ]; then find ' + fs_path + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Z ' + fs_path + "/" + filename + '; fi')
                             try:
                                 date_str = ssh_stdout1.readlines()[0].rstrip()
                             except:
