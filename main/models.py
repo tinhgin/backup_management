@@ -126,7 +126,7 @@ class Backup(models.Model):
 class BackupInstance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Unique ID for this particular backup")
-    backup = models.ForeignKey('Backup', on_delete=models.RESTRICT, null=True)
+    backup = models.ForeignKey('Backup', on_delete=models.CASCADE, null=True)
     file_name = models.CharField(max_length=100, unique=True)
     date = models.DateTimeField(null=True, blank=True)
     size = models.PositiveBigIntegerField(null=True, blank=True)
