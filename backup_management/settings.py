@@ -81,13 +81,6 @@ WSGI_APPLICATION = 'backup_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -154,20 +147,6 @@ DEFAULT_FROM_EMAIL = env.DEFAULT_FROM_EMAIL
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
-
-
-
-# ELASTIC_APM = {
-#   # Set required service name. Allowed characters:
-#   # a-z, A-Z, 0-9, -, _, and space
-#   'SERVICE_NAME': 'BackupManagement',
-#
-#   # Use if APM Server requires a token
-#   'SECRET_TOKEN': '9WgZHroZdFp82swffO',
-#
-#   # Set custom APM Server URL (default: http://localhost:8200)
-#   'SERVER_URL': 'https://observability-deployment-482094.apm.us-west1.gcp.cloud.es.io',
-# }
 
 CACHES = {
     'default': {
