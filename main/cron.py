@@ -66,7 +66,7 @@ def update_backup_instances_job():
                                     'if [ "$(stat -c %F ' + fs_path + "/" + k + ')" == "directory" ]; then find ' + fs_path + "/" + k + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Y ' + fs_path + "/" + k + '; fi')
                                 try:
                                     date_str = ssh_stdout1.readlines()[0].rstrip()
-                                except:
+                                except Exception:
                                     continue
                                 d_dict['date'] = datetime.datetime.fromtimestamp(int(date_str),
                                                                                  pytz.timezone(env.TIME_ZONE))
@@ -110,7 +110,7 @@ def update_backup_instances_job():
                                 'if [ "$(stat -c %F ' + fs_path + "/" + filename + ')" == "directory" ]; then find ' + fs_path + "/" + filename + ' -type f -daystart -print0 | xargs -0 stat -c %Y | sort -nr | head -1' + '; else stat -c %Z ' + fs_path + "/" + filename + '; fi')
                             try:
                                 date_str = ssh_stdout1.readlines()[0].rstrip()
-                            except:
+                            except Exception:
                                 continue
                             (ssh_stdin2, ssh_stdout2, ssh_stderr2) = ssh.exec_command(
                                 "du --byte -s " + fs_path + "/" + filename + " | awk '{print $1}'")
@@ -180,7 +180,7 @@ def update_backup_instances_job():
                         try:
                             try:
                                 s3_resource.Object(bucket, s3_path + '/' + j.file_name).load()
-                            except:
+                            except Exception:
                                 j.delete()
                                 connection.close()
                                 print("delete: " + endpoint_url + "/" + bucket + "/" + s3_path + '/' + j.file_name)
