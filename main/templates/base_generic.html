@@ -310,15 +310,7 @@
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Backup Management 2021 - tinhhn.uit@gmail.com</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            {% include "base/footer.html" %}
 
         </div>
         <!-- End of Content Wrapper -->
@@ -331,111 +323,21 @@
         <em class="fas fa-angle-up"></em>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "base/logout_modal.html" %}
 
+    {% include "base/toast_notification.html" %}
 
-    <!-- Toast-->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
-      <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
-        <div class="toast-header">
-          <img src="{% static 'main/img/title-icon.svg' %}" class="rounded me-2" alt="...">
-          <strong class="me-auto">Notification</strong>
-          <small>just now</small>
-          <button type="button" class="btn-close" data-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-          This feature is under development.
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'main/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'main/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'main/js/sb-admin-2.min.js' %}"></script>
-
-    <!-- Page level plugins -->
-    <script src="{% static 'main/vendor/chart.js/Chart.min.js' %}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{% static 'main/js/demo/chart-area-demo.js' %}"></script>
-    <script src="{% static 'main/js/demo/chart-pie-demo.js' %}"></script>
+    {% include "base/js_lib.html" %}
 
     <!-- table -->
     {% block add_js %}{% endblock %}
 
-    <!-- Popper.js first, then Bootstrap JS for Toast -->
-    <script>
-      document.getElementById("toastbtn_profile").onclick = function() {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function(toastEl) {
-        // Creates an array of toasts (it only initializes them)
-          return new bootstrap.Toast(toastEl) // No need for options; use the default options
-        });
-       toastList.forEach(toast => toast.show());
-      };
-    </script>
-    <script>
-      document.getElementById("toastbtn_settings").onclick = function() {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function(toastEl) {
-        // Creates an array of toasts (it only initializes them)
-          return new bootstrap.Toast(toastEl) // No need for options; use the default options
-        });
-       toastList.forEach(toast => toast.show());
-      };
-    </script>
-    <script>
-      document.getElementById("toastbtn_activity").onclick = function() {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function(toastEl) {
-        // Creates an array of toasts (it only initializes them)
-          return new bootstrap.Toast(toastEl) // No need for options; use the default options
-        });
-       toastList.forEach(toast => toast.show());
-      };
-    </script>
-    <script>
-      document.getElementById("toastbtn_search").onclick = function() {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function(toastEl) {
-        // Creates an array of toasts (it only initializes them)
-          return new bootstrap.Toast(toastEl) // No need for options; use the default options
-        });
-       toastList.forEach(toast => toast.show());
-      };
-    </script>
-
+    {% include "base/toastbtn.html" %}
 
     <script>
          $(".clickableRow").click(function() {
              var url = $(this).attr('href');
-             window.open(url, '_blank');
+             window.location.replace(url);
          })
     </script>
 

@@ -20,7 +20,7 @@ MAIL_TO = os.environ.get('MAIL_TO')
 
 HOST = os.environ.get('HOST')
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
 MEMCACHED = '127.0.0.1:11211'
