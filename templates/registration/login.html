@@ -47,7 +47,8 @@
 
                                       <form class="user" method="post" action="{% url 'login' %}">
                                         {% csrf_token %}
-                                        <table>
+                                        <table aria-hidden="true">
+                                            <caption style="display: none;">Login</caption>
                                           <div class="form-group">
                                               <input name="username" type="text" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelpx" placeholder="Username">
                                           </div>
